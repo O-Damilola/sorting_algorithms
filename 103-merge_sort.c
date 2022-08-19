@@ -1,106 +1,84 @@
 #include "sort.h"
-#include <stdio.h>
 
 /**
- * print_data - print data
- * @msg: message
- * @a: array
- * @from: from
- * @to: to
- * Return: no return
- */
-void print_data(char *msg, int *a, int from, int to)
+* merge - Merges the splits from merge_sorty
+* @array: Array split to merge
+* @low: lowest index of split
+* @middle: middle index of split
+* @high: high index of split
+* @temp: temp array for merging
+*/
+
+void merge(int *array, int low, int middle, int high, int *temp)
 {
-	char *sep;
-	int i;
-
-	printf("[%s]: ", msg);
-	sep = "";
-
-	for (i = from; i <= to; i++)
-	{
-		printf("%s%d", sep, a[i]);
-		sep = ", ";
-	}
-	printf("\n");
-}
-
-/**
- * merge - Auxiliary function for
- * Merge sort algorithm
- * @a: array
- * @low: low index
- * @middle: middle
- * @high: high index
- * @buff: buffer
- * Return: no return
- */
-void merge(int *a, int low, int middle, int high, int *buff)
-{
-	int lo, lm, i;
-
-	lo = i = low;
-	lm = middle + 1;
+	int i, j, k, l = 0, r = 0, n, left[4096], right[4096];
 
 	printf("Merging...\n");
-	print_data("left", a, low, middle);
-	print_data("right", a, middle + 1, high);
-
-	while (lo <= middle && lm <= high)
+	i = low, j = middle + 1, k = l = 0;
+	while (i <= middle && j <= high)
 	{
-		if (a[lo] < a[lm])
-			buff[i++] = a[lo++];
+		if (array[i] <= array[j])
+			temp[k] = left[l] = array[i], k++, i++, l++;
 		else
-			buff[i++] = a[lm++];
+			temp[k] = right[r] = array[j], k++, j++, r++;
 	}
-
-	while (lo <= middle)
-		buff[i++] = a[lo++];
-
-	while (lm <= high)
-		buff[i++] = a[lm++];
-
+	while (i <= middle)
+		temp[k] = left[l] = array[i], k++, i++, l++;
+	while (j <= high)
+		temp[k] = right[r] = array[j], k++, j++, r++;
+	printf("[left]: ");
+	for (n = 0; n < l; n++)
+		(n == 0) ? printf("%d", left[n]) : printf(", %d", left[n]);
+	printf("\n[right]: ");
+	for (n = 0; n < r; n++)
+		(n == 0) ? printf("%d", right[n]) : printf(", %d", right[n]);
+	printf("\n[Done]: ");
 	for (i = low; i <= high; i++)
-		a[i] = buff[i];
-
-	print_data("Done", a, low, high);
+	{
+		array[i] = temp[i - low], printf("%d", array[i]);
+		if (i != high)
+			printf(", ");
+		else
+			printf("\n");
+	}
 }
+
 /**
- * msort -Auxiliar function for
- * Merge sort algorithm
- * @array: array
- * @low: low index
- * @high: high index
- * @buffer: buffer
- * Return: no return
- */
-void msort(int *array, int low, int high, int *buffer)
+* merge_sorty - recurrsive function utilizing merge sort algo
+* @array: Array
+* @low: Lowest index of split
+* @high: highest index of split
+* @temp: temp array for mergin
+*/
+
+void merge_sorty(int *array, int low, int high, int *temp)
 {
-	int midle;
+	int middle;
 
 	if (low < high)
 	{
-		midle = (low + high - 1) / 2;
-		msort(array, low, midle, buffer);
-		msort(array, midle + 1, high, buffer);
-		merge(array, low, midle, high, buffer);
+		middle = ((high + low - 1) / 2);
+		merge_sorty(array, low, middle, temp);
+		merge_sorty(array, middle + 1, high, temp);
+		merge(array, low, middle, high, temp);
 	}
 }
+
 /**
- * merge_sort -Sorts an arrayof integers
- * in ascending order using the
- * Merge sort algorithm
- * @array: array
- * @size: size
- * Return: no return
- */
+* merge_sort - Sorts array with merge sort algo
+* @array: array to sort
+* @size: Size of array to sort
+*/
+
 void merge_sort(int *array, size_t size)
 {
-	int *buffer;
+	int *temp;
 
-	buffer = malloc(sizeof(int) * size);
-	if (!buffer)
+	if (array == NULL || size < 2)
 		return;
-	msort(array, 0, size - 1, buffer);
-	free(buffer);
+	temp = malloc(sizeof(int) * (size + 1));
+	if (temp == NULL)
+		return;
+	merge_sorty(array, 0, size - 1, temp);
+	free(temp);
 }

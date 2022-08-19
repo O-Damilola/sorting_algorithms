@@ -1,70 +1,31 @@
-#include <stddef.h>
 #include "sort.h"
 
 /**
- * quick_sort - function that sorts an array
- * of integers in ascending order using the
- * quick sort algorithm
- *
- * @array: input array
- * @size: size of the array
- * Return: no return
+ * selection_sort - sorts an array following the selection sort algorithm
+ * @array: array to sort
+ * @size: size of the array;
  */
-
-void quick_sort(int *array, size_t size)
+void selection_sort(int *array, size_t size)
 {
-    my_sort(array, 0, size - 1, size);
-}
+	unsigned int i, j, min;
 
+	register int tmp;
 
-/**
- * my_sort - auxiliary function for the quick_sort function
- * @a: input array
- * @low: index for the first element
- * @high: index for the last element
- * @size: size of the array
- * Return: no return
- */
+	if (size < 2)
+		return;
 
-void my_sort(int *arr, int low, int high, int size){
-    int pivot, i, j;
-    if(low < high){
-        pivot = arr[high];
-        i = low;
-        for(j = low; j < high; j++) {
-            if(arr[j] < pivot) {
-                Swap(&arr[i], &arr[j]);
-                print_array(arr, size);
-                i = i + 1;
-            }
-        }
-        Swap(&arr[i], &arr[high]);
-        print_array(arr, size);
-    }
-
-    my_sort(arr, low, i-1, size);
-
-    my_sort(arr, i+1, high, size);
-}
-
-/**
- * Swap - function that interchanges  an array
- * of integers in ascending order using the
- * Bubble sort algorithm
- *
- * @array: input array
- * @size: size of the array
- * Return: no return
- */
-
-void Swap(int *i, int *j){
-
-    int temp;
-
-    temp = *i;
-
-    *i = *j;
-
-    *j = temp;
-
+	for (i = 0; i < size; i++)
+	{
+		min = i;
+		for (j = i + 1; j < size; j++)
+		{
+			if (array[j] < array[min])
+				min = j;
+		}
+		tmp = array[i];
+		array[i] = array[min];
+		array[min] = tmp;
+		if (i != min)
+			print_array(array, size);
+	}
 }

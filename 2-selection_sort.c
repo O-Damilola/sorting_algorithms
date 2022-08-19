@@ -1,52 +1,31 @@
-#include <stddef.h>
 #include "sort.h"
 
-
 /**
- * selection_sort - sorts an array of integers in
- * ascending order using the Selection sort algorithm
- *
- * @array: input array of integers
- * @size: size of the array
- * Return: no return
+ * selection_sort - sorts an array following the selection sort algorithm
+ * @array: array to sort
+ * @size: size of the array;
  */
-
 void selection_sort(int *array, size_t size)
 {
-    size_t i, j;
-    for(i = 0; i < size; i++)
-    {
-        for(j = i + 1; j < size; j++)
-        {
-            if(array[i] > array[j])
-            {
-                Swap(&array[i], &array[j]);
+	unsigned int i, j, min;
 
-                print_array(array, size);
-            }
-        }
-    }
-}
+	register int tmp;
 
+	if (size < 2)
+		return;
 
-/**
- * Swap - function that interchanges  an array
- * of integers in ascending order using the
- * Bubble sort algorithm
- *
- * @array: input array
- * @size: size of the array
- * Return: no return
- */
-
-void Swap(int *i, int *j){
-
-    int temp;
-
-    temp = *i;
-
-    *i = *j;
-
-    *j = temp;
-
+	for (i = 0; i < size; i++)
+	{
+		min = i;
+		for (j = i + 1; j < size; j++)
+		{
+			if (array[j] < array[min])
+				min = j;
+		}
+		tmp = array[i];
+		array[i] = array[min];
+		array[min] = tmp;
+		if (i != min)
+			print_array(array, size);
+	}
 }

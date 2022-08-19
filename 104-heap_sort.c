@@ -1,87 +1,51 @@
 #include "sort.h"
-#include <stdio.h>
-/**
- * swap_nums - swaps numbers
- *
- * @arr: input array
- * @a: first index
- * @b: second index
- * Return: no return
- */
-
-void swap_nums(int *arr, int a, int b)
-{
-	arr[a] = arr[a] + arr[b];
-	arr[b] = arr[a] - arr[b];
-	arr[a] = arr[a] - arr[b];
-}
 
 /**
- * recursion_heap - recursion that builds the max heap tree
- *
- * @arr: input array
- * @i: index number
- * @size: size of the array
- * @limit: limit of the array
- * Return: no return
- */
+* stupify - recurrssive heapfiy function
+* @array: Array to sort
+* @heap: size of heap data
+* @i: index
+* @size: size of array
+*/
 
-void recursion_heap(int *arr, int i, size_t size, int limit)
+void stupify(int *array, int heap, int i, int size)
 {
-	int bigger;
-	int i2;
+	int lar = i, left = 2 * i + 1, right = 2 * i + 2, t;
 
-	i2 = i * 2;
-
-	if (i2 + 2 < limit)
+	if (left < heap && array[left] > array[lar])
+		lar = left;
+	if (right < heap && array[right] > array[lar])
+		lar = right;
+	if (lar != i)
 	{
-		recursion_heap(arr, i2 + 1, size, limit);
-		recursion_heap(arr, i2 + 2, size, limit);
-	}
-
-	if (i2 + 1 >= limit)
-		return;
-
-	if (i2 + 2 < limit)
-		bigger = (arr[i2 + 1] > arr[i2 + 2]) ? (i2 + 1) : (i2 + 2);
-	else
-		bigger = i2 + 1;
-
-	if (arr[i] < arr[bigger])
-	{
-		swap_nums(arr, i, bigger);
-		print_array(arr, size);
-		recursion_heap(arr, bigger, size, limit);
+		t = array[i], array[i] = array[lar], array[lar] = t;
+		print_array(array, size);
+		stupify(array, heap, lar, size);
 	}
 }
 
 /**
- * heap_sort - sorts an array of integers in ascending
- * order using the Heap sort algorithm
- *
- * @array: input array
- * @size: size of the array
- */
+* heap_sort - Sorts array with heap sort algo
+* @array: array to sort
+* @size: Size of array to sort
+*/
 
 void heap_sort(int *array, size_t size)
 {
-	int i;
-	size_t limit;
+	int i = size / 2 - 1, temp;
 
-	if (!array || size == 0)
+	if (array == NULL || size < 2)
 		return;
-
-	i = 0;
-	limit = size;
-
-	while (limit > 1)
+	for (; i >= 0; i--)
+		stupify(array, size, i, size);
+	for (i = size - 1; i >= 0; i--)
 	{
-		recursion_heap(array, i, size, limit);
-		if (array[i] >= array[limit - 1])
-		{
-			swap_nums(array, i, limit - 1);
+		temp = array[0];
+		array[0] = array[i];
+		array[i] = temp;
+		if (i > 0)
 			print_array(array, size);
-		}
-		limit--;
+		stupify(array, i, 0, size);
 	}
+
 }
