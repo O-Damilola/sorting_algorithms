@@ -1,31 +1,76 @@
 #include "sort.h"
 
 /**
- * selection_sort - sorts an array following the selection sort algorithm
- * @array: array to sort
- * @size: size of the array;
- */
-void selection_sort(int *array, size_t size)
+* partition - Lomutu partition scheme for quicksort algorithm
+* @a: Array to sort
+* @l: lowest index of array
+* @h: highest index of array
+* Return: index of pivot
+*/
+
+int partition(int *a, int l, int h)
 {
-	unsigned int i, j, min;
+	int p, i, j, t;
+	static int size, k;
 
-	register int tmp;
-
-	if (size < 2)
-		return;
-
-	for (i = 0; i < size; i++)
+	if (k == 0)
+		size = h + 1, k++;
+	p = a[h];
+	i = l;
+	for (j = l; j < h; j++)
 	{
-		min = i;
-		for (j = i + 1; j < size; j++)
+		if (a[j] <= p)
 		{
-			if (array[j] < array[min])
-				min = j;
+			if (i != j)
+			{
+				t = a[i];
+				a[i] = a[j];
+				a[j] = t;
+				print_array(a, size);
+			}
+			i++;
 		}
-		tmp = array[i];
-		array[i] = array[min];
-		array[min] = tmp;
-		if (i != min)
-			print_array(array, size);
 	}
+	if (i != h)
+	{
+		t = a[i];
+		a[i] = a[h];
+		a[h] = t;
+		print_array(a, size);
+	}
+
+	return (i);
+}
+
+/**
+* qs - Quicksort recurssive function
+* @a: array to sort
+* @l: lowest index
+* @h: highest index
+*/
+
+void qs(int *a, int l, int h)
+{
+	int p;
+
+	if (l < h)
+	{
+		p = partition(a, l, h);
+		qs(a, l, p - 1);
+		qs(a, p + 1, h);
+	}
+}
+
+
+/**
+* quick_sort - sorts array using quicksort algorithm
+* @array: Array to sort
+* @size: Size of array to sort
+*/
+
+void quick_sort(int *array, size_t size)
+{
+	if (array == NULL)
+		return;
+	qs(array, 0, size - 1);
 }
