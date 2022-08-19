@@ -37,22 +37,20 @@ void Swap(int *i, int *j){
 
 void bubble_sort(int *array, size_t size)
 {
-    size_t x, y;
+	size_t n = size, new_n, i;
 
-    for(x = 0; x < size - 1; x++)
-    {
-        for(y = 0; y < size - x - 1; y++)
-        {
-            if(array[y] > array[y + 1])
-            {
-                Swap(&array[y], &array[y + 1]);
-
-                print_array(array, size);
-
-            }
-
-        }
-
-    }
-
+	while (n > 1)
+	{
+		new_n = 0;
+		for (i = 1; i <= n - 1; i++)
+		{
+			if (array[i - 1] > array[i])
+			{
+				swap_values(&array, i - 1, i);
+				print_array(array, size);
+				new_n = i;
+			}
+		}
+		n = new_n;
+	}
 }
