@@ -1,3 +1,5 @@
+#include "sort.h"
+
 /**
  * swap_values - swaps 2 values in an array of ints
  *
